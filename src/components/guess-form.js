@@ -25,7 +25,6 @@ export class GuessForm extends React.Component {
 
 const mapStateToProps = state => ({
     guessCount: state.guesses.length,
-    fewestGuesses: state.fewestGuesses,
     correctAnswer: state.correctAnswer
 });
 
