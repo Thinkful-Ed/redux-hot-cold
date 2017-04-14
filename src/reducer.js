@@ -16,7 +16,6 @@ export default (state, action) => {
     if (action.type === NEW_GAME) {
         state = Object.assign({
         }, initialState, {
-            fewestGuesses: state.fewestGuesses,
             correctAnswer: action.correctAnswer
         });
         return state;
