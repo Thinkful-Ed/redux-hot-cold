@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import GuessForm from './guess-form';
 
+import './guess-section.css';
+
 export function GuessSection(props) {
     return (
         <section>

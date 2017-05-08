@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import {newGame, toggleInfoModal} from '../actions';
 
+import './top-nav.css';
+
 export class TopNav extends React.Component {
     newGame(event) {
         event.preventDefault();

@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import {toggleInfoModal} from '../actions';
 
+import './info-modal.css';
+
 export class InfoModal extends React.Component {
     hide(event) {
         event.preventDefault();

@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import {makeGuess} from '../actions';
 
+import './guess-form.css';
+
 export class GuessForm extends React.Component {
     submitGuess(event) {
         event.preventDefault();
