@@ -21,12 +21,12 @@ export class TopNav extends React.Component {
             <nav>
                 <ul className="clearfix">
                     <li>
-                        <a className="what" href="#" onClick={e => this.toggleInfoModal(e)}>
+                        <a className="what" aria-label="How to play" href="#modal" onClick={e => this.toggleInfoModal(e)}>
                             What?
                         </a>
                     </li>
                     <li>
-                        <a className="new" href="#" onClick={e => this.newGame(e)}>
+                        <a className="new" aria-live="Start a new game" href="#feedback" onClick={e => this.newGame(e)}>
                             + New Game
                         </a>
                     </li>
