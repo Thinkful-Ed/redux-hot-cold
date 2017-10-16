@@ -7,7 +7,7 @@ import {
 const initialState = {
     guesses: [],
     feedback: 'Make your guess!',
-    correctAnswer: Math.round(Math.random() * 100),
+    correctAnswer: Math.floor(Math.random() * 100) + 1,
     showInfoModal: false
 };
 
