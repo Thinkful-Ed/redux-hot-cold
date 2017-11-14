@@ -1,39 +1,47 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {newGame, toggleInfoModal} from '../actions';
+import { generateAuralUpdate, restartGame } from '../actions';
 
 import './top-nav.css';
 
-export class TopNav extends React.Component {
-    newGame(event) {
-        event.preventDefault();
-        this.props.dispatch(newGame());
-    }
-
-    toggleInfoModal(event) {
-        event.preventDefault();
-        this.props.dispatch(toggleInfoModal());
-    }
-
-    render() {
-        return (
-            <nav>
-                <ul className="clearfix">
-                    <li>
-                        <a className="what" href="#" onClick={e => this.toggleInfoModal(e)}>
-                            What?
-                        </a>
-                    </li>
-                    <li>
-                        <a className="new" href="#" onClick={e => this.newGame(e)}>
-                            + New Game
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        );
-    }
-};
+export function TopNav(props) {
+  return (
+    <nav>
+      <ul className="clearfix">
+        <li>
+          <a 
+            href="#what" 
+            className="what"
+            aria-label="How to play"
+          >
+            What?
+          </a>
+        </li>
+        <li>
+          <a
+            href="#feedback"
+            className="new"
+            aria-label="Start a new game"
+            onClick={() => props.dispatch(restartGame())}
+          >
+            + New Game
+          </a>
+        </li>
+        <li>
+          <a
+            href="#get-status"
+            /* the `visuallyhidden` class hides an element 
+            while leaving it available to screen reader users  */
+            className="visuallyhidden focusable status-link"
+            onClick={() => props.dispatch(generateAuralUpdate())}
+          >
+            Hear state of game
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
+}
 
 export default connect()(TopNav);

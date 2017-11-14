@@ -1,67 +1,79 @@
-import {
-    NEW_GAME,
-    MAKE_GUESS,
-    TOGGLE_INFO_MODAL
-} from './actions';
+import { RESTART_GAME, MAKE_GUESS, GENERATE_AURAL_UPDATE } from './actions';
 
 const initialState = {
-    guesses: [],
-    feedback: 'Make your guess!',
-    correctAnswer: Math.floor(Math.random() * 100) + 1,
-    showInfoModal: false
+  guesses: [],
+  feedback: 'Make your guess!',
+  auralStatus: '',
+  correctAnswer: Math.round(Math.random() * 100) + 1
 };
 
-export default (state, action) => {
-    state = state || initialState;
-    if (action.type === NEW_GAME) {
-        state = Object.assign({
-        }, initialState, {
-            correctAnswer: action.correctAnswer
-        });
-        return state;
+export default(state=initialState, action) => {
+
+  if (action.type === RESTART_GAME) {
+    
+    return Object.assign({}, state, {
+      guesses: [],
+      feedback: 'Make your guess!',
+      auralStatus: '',
+      correctAnswer: Math.round(Math.random() * 100) + 1
+    });
+  }
+
+  if (action.type === MAKE_GUESS) {
+    let feedback, guess;
+
+    guess = parseInt(action.guess, 10);
+    if (isNaN(guess)) {
+      feedback = 'Please enter a valid number.';
+
+      return Object.assign({}, state, {
+        feedback,
+        guesses: [...state.guesses, guess]
+      }); 
     }
-    else if (action.type === MAKE_GUESS) {
-        const guess = parseInt(action.guess, 10);
-        if (isNaN(guess)) {
-            state = Object.assign({}, state, {
-                feedback: 'Please enter a valid number'
-            });
 
-            return state;
-        }
+    const difference = Math.abs(guess - state.correctAnswer);
 
-        const difference = Math.abs(guess - state.correctAnswer);
-
-        let feedback;
-        if (difference >= 50) {
-            feedback = 'You\'re Ice Cold...';
-        }
-        else if (difference >= 30) {
-            feedback = 'You\'re Cold...';
-        }
-        else if (difference >= 10) {
-            feedback = 'You\'re Warm';
-        }
-        else if (difference >= 1) {
-            feedback = 'You\'re Hot!';
-        }
-        else {
-            feedback = 'You got it!';
-        }
-
-        state = Object.assign({}, state, {
-            feedback,
-            guesses: state.guesses.concat(action.guess)
-        });
-
-        return state;
+    if (difference >= 50) {
+      feedback = 'You\'re Ice Cold...';
+    } else if (difference >= 30) {
+      feedback = 'You\'re Cold...';
+    } else if (difference >= 10) {
+      feedback = 'You\'re Warm.';
+    } else if (difference >= 1) {
+      feedback = 'You\'re Hot!';
+    } else {
+      feedback = 'You got it!';
     }
-    else if (action.type === TOGGLE_INFO_MODAL) {
-         state = Object.assign({}, state, {
-             showInfoModal: !state.showInfoModal
-        });
-        return state;
+
+    // We typically wouldn't touch the DOM directly like this in React
+    // but this is the best way to update the title of the page,
+    // which is good for giving screen-reader users
+    // instant information about the app.
+    document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
+
+    return Object.assign({}, state, {
+      feedback,
+      guesses: [...state.guesses, guess]
+    });
+  }
+
+  if (action.type === GENERATE_AURAL_UPDATE) {
+    const { guesses, feedback } = state;
+    
+    // If there's not exactly 1 guess, we want to
+    // pluralize the nouns in this aural update.
+    const pluralize = guesses.length !== 1;
+
+    let  auralStatus = `Here's the status of the game right now: ${feedback} You've made ${guesses.length} ${pluralize ? 'guesses' : 'guess'}.`;
+
+    if (guesses.length > 0) {
+      auralStatus += ` ${pluralize ? 'In order of most- to least-recent, they are' : 'It was'}: 
+      ${guesses.reverse().join(', ')}`;
     }
-    return state;
+
+    return Object.assign({}, state, { auralStatus });
+  }
+
+  return state;
 };
-
